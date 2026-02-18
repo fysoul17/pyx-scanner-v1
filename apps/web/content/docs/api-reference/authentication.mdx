@@ -1,0 +1,23 @@
+---
+title: Authentication
+description: PYX Scanner's public API requires no authentication.
+---
+
+# Authentication
+
+The PYX Scanner public API is **free and requires no authentication**.
+
+All read endpoints (`check`, `list`, `badge`) are open to everyone. No API keys, no OAuth, no headers needed.
+
+```bash
+# Just call it
+curl https://scanner.pyxmate.com/api/v1/check/anthropic/web-search
+```
+
+## CORS
+
+All API endpoints support CORS, so you can call them directly from browser-based applications.
+
+## Rate Limits
+
+Instead of authentication, the API uses rate limiting per IP address. See [Rate Limits](/docs/api-reference/rate-limits) for details.

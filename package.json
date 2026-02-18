@@ -1,0 +1,46 @@
+{
+  "name": "pyx-scanner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The trust layer for the AI agent ecosystem — automated security scanning for AI agent skills",
+  "license": "BUSL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fysoul17/pyx-scanner.git"
+  },
+  "homepage": "https://scanner.pyxmate.com",
+  "bugs": {
+    "url": "https://github.com/fysoul17/pyx-scanner/issues"
+  },
+  "keywords": [
+    "mcp",
+    "security",
+    "scanner",
+    "trust",
+    "ai-agents",
+    "model-context-protocol"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@10.27.0",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "build:worker": "pnpm --filter web build:worker",
+    "deploy": "pnpm --filter web deploy",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web exec tsc --noEmit",
+    "scan": "tsx scripts/scan.ts",
+    "scan:dry": "tsx scripts/scan.ts --dry-run",
+    "scan:clawhub": "tsx scripts/clawhub-import.ts",
+    "scan:clawhub:dry": "tsx scripts/clawhub-import.ts --dry-run",
+    "scan:queue": "tsx scripts/process-queue.ts",
+    "backfill:external-scans": "tsx scripts/backfill-external-scans.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,41 @@
+---
+title: How It Works
+description: What PYX Scanner checks and how trust assessments are produced.
+---
+
+# How It Works
+
+PYX Scanner evaluates AI skills across **7 threat categories** using a multi-stage pipeline. Every scan is tied to a specific commit hash — if the code changes, the previous scan is invalidated.
+
+## 7 Threat Categories
+
+Every scan evaluates these categories:
+
+| # | Category | What It Catches |
+|---|----------|-----------------|
+| 1 | **Data Exfiltration** | HTTP requests sending local data to external servers, DNS exfiltration, paste service uploads |
+| 2 | **Destructive Commands** | `rm -rf`, `git force push`, database `DROP`/`TRUNCATE`, format commands |
+| 3 | **Secret Access** | Reading SSH keys, cloud metadata endpoints, `.env` files, credential stores |
+| 4 | **Obfuscation** | `eval()`, base64/hex encoding to hide commands, dynamic `import()` with constructed URLs |
+| 5 | **Prompt Injection** | Instructions to override system prompts, hidden text in comments, jailbreak patterns |
+| 6 | **Social Engineering** | Fake urgency, impersonation of trusted entities, misleading documentation |
+| 7 | **Excessive Permissions** | Filesystem/network access beyond stated purpose, unnecessary shell execution |
+
+## Scanning Pipeline
+
+1. **Static Analysis** — 20 regex-based rules run against the source code (14 critical, 4 warning, 2 info). This catches known-bad patterns in milliseconds.
+
+2. **Dependency Scan** — All dependencies are checked against the [OSV.dev](https://osv.dev/) vulnerability database for known CVEs.
+
+3. **AI Analysis** — Static findings and dependency results are injected as context into a Claude Opus prompt. The AI performs deep semantic analysis across all 7 threat categories.
+
+4. **Structured Output** — The result includes a risk score (0–10), intent classification (benign/risky/malicious), confidence score (0–100), and detailed findings.
+
+## Commit-Locked Results
+
+Every scan result is tied to the **exact commit hash** of the code that was analyzed. This means:
+
+- Results cannot be transferred from safe code to malicious code
+- If the skill's code changes, the `is_outdated` flag is set to `true`
+- The `safe` boolean returns `false` for outdated scans
+- A new scan is needed to re-verify

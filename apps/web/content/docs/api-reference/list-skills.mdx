@@ -1,0 +1,77 @@
+---
+title: List Skills
+description: Get a paginated list of all scanned AI skills.
+---
+
+# List Skills
+
+Returns a paginated list of all scanned AI skills, with optional filtering by status, category, or search term.
+
+## Endpoint
+
+```
+GET /api/v1/skills
+```
+
+## Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `search` | string | — | Search owner, name, or description |
+| `status` | string | — | Filter by trust status: `verified`, `caution`, `failed`, `unscanned` |
+| `category` | string | — | Filter by category: `developer-tools`, `version-control`, `web-browser`, `data-files`, `cloud-infra`, `communication`, `search-research`, `productivity`, `other` |
+| `limit` | integer | 20 | Results per page (max 100) |
+| `offset` | integer | 0 | Pagination offset |
+
+## Example
+
+```bash
+curl "https://scanner.pyxmate.com/api/v1/skills?status=verified&limit=5"
+```
+
+## Response (200)
+
+```json
+{
+  "skills": [
+    {
+      "owner": "anthropic",
+      "name": "web-search",
+      "status": "verified",
+      "source": "github",
+      "category": "search-research",
+      "description": "Web search skill for Claude",
+      "detail_url": "https://scanner.pyxmate.com/s/anthropic/web-search",
+      "badge_url": "https://scanner.pyxmate.com/api/v1/badge/anthropic/web-search",
+      "updated_at": "2026-02-10T12:00:00Z"
+    }
+  ],
+  "total": 42,
+  "limit": 5,
+  "offset": 0
+}
+```
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `skills` | array | Array of skill summaries |
+| `skills[].owner` | string | Skill owner |
+| `skills[].name` | string | Skill name |
+| `skills[].status` | string | Current trust status |
+| `skills[].source` | string | Source registry (`github` or `clawhub`) |
+| `skills[].category` | string \| null | Functional category |
+| `skills[].description` | string \| null | Brief description |
+| `skills[].detail_url` | string | Link to detail page |
+| `skills[].badge_url` | string | Link to SVG badge |
+| `skills[].updated_at` | string | Last updated timestamp |
+| `total` | integer | Total matching results |
+| `limit` | integer | Page size used |
+| `offset` | integer | Offset used |
+
+## Error Responses
+
+| Status | Description |
+|--------|-------------|
+| `429` | Rate limit exceeded (30 req/min) |

@@ -1,0 +1,50 @@
+---
+title: Badge
+description: Get an SVG trust badge for any scanned skill.
+---
+
+# Badge
+
+Returns an SVG badge image showing the skill's current trust status. Embed in READMEs, documentation, or anywhere that renders images.
+
+## Endpoint
+
+```
+GET /api/v1/badge/{owner}/{name}
+```
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | Yes | Skill owner or organization |
+| `name` | string | Yes | Skill name |
+
+## Response
+
+Returns an `image/svg+xml` response. The badge displays the current trust status with color coding:
+
+- **Verified** — Green badge
+- **Caution** — Amber badge
+- **High Risk** — Red badge
+- **Unscanned** — Gray badge
+
+## Embedding in Markdown
+
+```markdown
+[![PYX Trust Score](https://scanner.pyxmate.com/api/v1/badge/OWNER/NAME)](https://scanner.pyxmate.com/s/OWNER/NAME)
+```
+
+Replace `OWNER` and `NAME` with the skill's owner and name.
+
+## Embedding in HTML
+
+```html
+<a href="https://scanner.pyxmate.com/s/OWNER/NAME">
+  <img src="https://scanner.pyxmate.com/api/v1/badge/OWNER/NAME" alt="PYX Trust Score" />
+</a>
+```
+
+## Caching
+
+Badge responses are cached. After a new scan completes, the badge updates automatically.

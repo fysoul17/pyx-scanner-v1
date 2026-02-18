@@ -1,0 +1,50 @@
+---
+title: Introduction
+description: PYX Scanner — The Trust Layer for AI. Protect your platform from malicious AI skills.
+---
+
+# PYX Scanner
+
+**The Trust Layer for AI** — every AI skill scanned server-side before it reaches your users.
+
+PYX Scanner is a security scanning API for AI skills (MCP tools, ClawHub packages, and more). It analyzes each skill for 7 threat categories and returns a structured trust assessment that your platform can use to protect users from malicious code.
+
+## Why Integrate PYX Scanner?
+
+AI skill ecosystems are growing fast. As platforms like OpenClaw, Claude, and others adopt MCP tools, the attack surface grows with them. PYX Scanner lets you:
+
+- **Gate installations** — Check any skill's trust status before allowing installation
+- **Show trust signals** — Display verified/caution/high-risk badges to users
+- **Automate decisions** — Use the `safe` boolean for programmatic install/block logic
+- **Stay current** — Scans are tied to commit hashes; if code changes, the scan is invalidated
+
+## How It Works
+
+1. A skill is submitted for scanning
+2. PYX Scanner runs **static analysis** (20 regex rules) and **dependency scanning** (OSV.dev)
+3. Results are fed into **Claude Opus** for deep security analysis across 7 threat categories
+4. A structured trust assessment is produced with a risk score, intent classification, and detailed findings
+5. The result is tied to the exact commit hash — tamper-proof
+
+## Quick Example
+
+```bash
+curl https://scanner.pyxmate.com/api/v1/check/anthropic/web-search
+```
+
+```json
+{
+  "safe": true,
+  "status": "verified",
+  "risk_score": 1,
+  "confidence": 95,
+  "summary": "This skill provides web search capabilities..."
+}
+```
+
+## Next Steps
+
+- [Quick Start](/docs/getting-started/quick-start) — Check your first skill in 30 seconds
+- [Trust Scores](/docs/trust-scores/overview) — Understand the three-tier scoring system
+- [Agent Integration Guide](/docs/integrations/agent-guide) — Decision flow for AI agents
+- [API Reference](/docs/api-reference/check-skill) — Full endpoint documentation

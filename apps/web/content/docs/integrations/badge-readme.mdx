@@ -1,0 +1,51 @@
+---
+title: Badge Integration
+description: Embed PYX Scanner trust badges in your README or documentation.
+---
+
+# Badge Integration
+
+Show your skill's trust status with an auto-updating badge. Badges are tied to the latest scan and update automatically.
+
+## Markdown
+
+```markdown
+[![PYX Trust Score](https://scanner.pyxmate.com/api/v1/badge/OWNER/NAME)](https://scanner.pyxmate.com/s/OWNER/NAME)
+```
+
+## HTML
+
+```html
+<a href="https://scanner.pyxmate.com/s/OWNER/NAME">
+  <img
+    src="https://scanner.pyxmate.com/api/v1/badge/OWNER/NAME"
+    alt="PYX Trust Score"
+  />
+</a>
+```
+
+## Badge Styles
+
+The badge color changes based on trust status:
+
+| Status | Color |
+|--------|-------|
+| Verified | Green |
+| Caution | Amber |
+| High Risk | Red |
+| Unscanned | Gray |
+
+## For Platforms
+
+If you're building a skill marketplace, you can display badges programmatically:
+
+```jsx
+function SkillBadge({ owner, name }) {
+  return (
+    <img
+      src={`https://scanner.pyxmate.com/api/v1/badge/${owner}/${name}`}
+      alt={`PYX trust score for ${owner}/${name}`}
+    />
+  );
+}
+```

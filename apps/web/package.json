@@ -1,0 +1,43 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "private": true,
+  "license": "BUSL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fysoul17/pyx-scanner.git",
+    "directory": "apps/web"
+  },
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "build:worker": "opennextjs-cloudflare build",
+    "start": "next start",
+    "lint": "eslint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "postinstall": "fumadocs-mdx"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.16.4",
+    "@supabase/supabase-js": "^2",
+    "fumadocs-core": "^16.5.4",
+    "fumadocs-mdx": "^14.2.7",
+    "fumadocs-ui": "^16.5.4",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "@types/mdx": "^2.0.13",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wrangler": "^4.64.0"
+  }
+}

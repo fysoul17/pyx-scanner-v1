@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+@import "../styles/chalk-voltage.css";
+
+@theme {
+  --color-cv-bg: #f5f0ea;
+  --color-cv-surface: #ebe5dd;
+  --color-cv-text: #1a1612;
+  --color-cv-text-muted: #8a8078;
+  --color-cv-accent: #ff4d00;
+  --color-cv-accent-hover: #ff6622;
+  --color-cv-verified: #16a34a;
+  --color-cv-failed: #dc2626;
+  --color-cv-warning: #ca8a04;
+  --color-cv-scanning: #6366f1;
+  --font-display: var(--font-outfit);
+  --font-mono: var(--font-azeret-mono);
+
+  /* Fumadocs — Chalk Voltage overrides */
+  --color-fd-background: #f5f0ea;
+  --color-fd-foreground: #1a1612;
+  --color-fd-muted-foreground: #8a8078;
+  --color-fd-card: #ebe5dd;
+  --color-fd-primary: #ff4d00;
+  --color-fd-border: rgba(26, 22, 18, 0.1);
+}
+
+body {
+  font-family: var(--font-mono);
+  background: var(--color-cv-bg);
+  color: var(--color-cv-text);
+  overflow-x: hidden;
+}

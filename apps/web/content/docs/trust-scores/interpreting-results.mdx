@@ -1,0 +1,74 @@
+---
+title: Interpreting Results
+description: How to read and use PYX Scanner's check response fields.
+---
+
+# Interpreting Results
+
+The `/api/v1/check/{owner}/{name}` endpoint returns a structured trust assessment. Here's what each field means and how to use it.
+
+## The `safe` Boolean
+
+This is the **primary decision field**. It combines multiple signals into a single yes/no answer:
+
+```
+safe === true  when:
+  - recommendation is "safe"
+  - is_outdated is false
+
+safe === false when:
+  - status is "caution", "failed", or "unscanned"
+  - OR is_outdated is true (code changed since scan)
+```
+
+For most integrations, `safe` is all you need.
+
+## Status Field
+
+The `status` field provides more context than `safe`:
+
+| Status | Meaning | `safe` |
+|--------|---------|--------|
+| `verified` | Passed all checks, code matches scan | `true` |
+| `caution` | Suspicious but not clearly malicious | `false` |
+| `failed` | Threats detected | `false` |
+| `unscanned` | Never been scanned | `false` |
+
+## Risk Score vs Trust Score
+
+| Field | Range | Direction | Use Case |
+|-------|-------|-----------|----------|
+| `risk_score` | 0–10 | Lower is safer | Threshold-based blocking |
+| `trust_score` | 0–100 | Higher is safer | UI display, sorting |
+
+## Outdated Scans
+
+The `is_outdated` field is critical for security:
+
+```json
+{
+  "is_outdated": true,
+  "scanned_commit": "abc123",
+  "latest_commit": "def456"
+}
+```
+
+When `is_outdated` is `true`, the code has changed since the last scan. The previous assessment no longer applies. Treat this as unverified until a new scan completes.
+
+## About Object
+
+The `about` field contains an AI-generated description of the skill:
+
+```json
+{
+  "about": {
+    "purpose": "Provides web search functionality",
+    "capabilities": ["Search the web", "Return formatted results"],
+    "use_cases": ["Research", "Fact-checking"],
+    "permissions_required": ["network"],
+    "security_notes": "Only accesses public web content"
+  }
+}
+```
+
+This is useful for displaying skill information to end users before they decide to install.

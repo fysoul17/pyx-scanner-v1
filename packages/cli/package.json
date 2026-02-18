@@ -1,0 +1,22 @@
+{
+  "name": "pyx-scanner",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "BUSL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fysoul17/pyx-scanner.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "pyx-scanner": "./dist/bin.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

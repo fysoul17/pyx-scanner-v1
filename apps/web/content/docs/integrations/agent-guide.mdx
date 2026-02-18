@@ -1,0 +1,103 @@
+---
+title: Agent Integration Guide
+description: How AI agents should use PYX Scanner to protect users from malicious skills.
+---
+
+# Agent Integration Guide
+
+This guide is for **AI agent platforms** and **MCP clients** that want to protect their users from malicious AI skills. Use PYX Scanner as a trust gate before installing any skill.
+
+## Decision Flow
+
+When your agent is about to install an AI skill:
+
+```
+1. GET /api/v1/check/{owner}/{name}
+
+2. if response.safe === true
+     → Proceed with installation
+
+3. if response.safe === false && response.status === "caution"
+     → Warn the user
+     → Show response.summary
+     → Let them decide
+
+4. if response.safe === false && response.status === "failed"
+     → Block installation
+     → Show response.summary and risk details
+
+5. if 404 (not found)
+     → Skill has never been scanned
+     → Proceed with extra caution or deny
+```
+
+## Key Fields for Agents
+
+| Field | How to Use |
+|-------|-----------|
+| `safe` | Primary gate — `true` means install, `false` means stop and evaluate |
+| `status` | Provides context for why `safe` is `false` |
+| `risk_score` | Use for custom thresholds (e.g., block if > 5) |
+| `confidence` | If low (< 50), the analysis may be incomplete |
+| `is_outdated` | If `true`, the code changed since the scan — treat as unverified |
+| `summary` | Show to users when blocking or warning |
+
+## Example: Simple Gate
+
+```python
+import requests
+
+def check_skill(owner: str, name: str) -> bool:
+    """Returns True if the skill is safe to install."""
+    resp = requests.get(
+        f"https://scanner.pyxmate.com/api/v1/check/{owner}/{name}"
+    )
+
+    if resp.status_code == 404:
+        return False  # Never scanned — don't trust
+
+    data = resp.json()
+    return data.get("safe", False)
+```
+
+## Example: Rich Decision
+
+```python
+def evaluate_skill(owner: str, name: str) -> dict:
+    """Returns an install decision with context."""
+    resp = requests.get(
+        f"https://scanner.pyxmate.com/api/v1/check/{owner}/{name}"
+    )
+
+    if resp.status_code == 404:
+        return {
+            "action": "deny",
+            "reason": "This skill has never been scanned by PYX Scanner."
+        }
+
+    data = resp.json()
+
+    if data["safe"]:
+        return {"action": "allow"}
+
+    if data["status"] == "caution":
+        return {
+            "action": "warn",
+            "reason": data.get("summary", "Suspicious patterns detected."),
+            "risk_score": data.get("risk_score")
+        }
+
+    return {
+        "action": "block",
+        "reason": data.get("summary", "Security threats detected."),
+        "risk_score": data.get("risk_score")
+    }
+```
+
+## Best Practices
+
+1. **Always check before install** — don't skip the check even for popular skills
+2. **Cache results** — skill trust status doesn't change until the code changes
+3. **Respect `is_outdated`** — if the code changed, the previous assessment is void
+4. **Show the summary** — when blocking or warning, display the scanner's summary to help users understand why
+5. **Handle 404 gracefully** — not every skill has been scanned yet; decide your policy for unscanned skills

@@ -1,0 +1,91 @@
+---
+title: Check a Skill
+description: Get the trust assessment for a specific AI skill.
+---
+
+# Check a Skill
+
+Returns the security assessment for a specific AI skill, including whether it is safe to install.
+
+## Endpoint
+
+```
+GET /api/v1/check/{owner}/{name}
+```
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | Yes | Skill owner or organization (e.g., `anthropic`) |
+| `name` | string | Yes | Skill name (e.g., `web-search`) |
+
+## Response (200)
+
+```json
+{
+  "safe": true,
+  "status": "verified",
+  "recommendation": "safe",
+  "owner": "anthropic",
+  "name": "web-search",
+  "risk_score": 1,
+  "trust_score": 90,
+  "confidence": 95,
+  "intent": "benign",
+  "scanned_commit": "abc123",
+  "latest_commit": "abc123",
+  "is_outdated": false,
+  "last_safe_commit": "abc123",
+  "last_safe_version": null,
+  "summary": "This skill provides web search capabilities...",
+  "about": {
+    "purpose": "Provides web search functionality",
+    "capabilities": ["Search the web", "Return formatted results"],
+    "use_cases": ["Research", "Fact-checking"],
+    "permissions_required": ["network"],
+    "security_notes": "Only accesses public web content"
+  },
+  "category": "search-research",
+  "scanned_at": "2026-02-10T12:00:00Z",
+  "detail_url": "https://scanner.pyxmate.com/s/anthropic/web-search",
+  "badge_url": "https://scanner.pyxmate.com/api/v1/badge/anthropic/web-search",
+  "repository_url": "https://github.com/anthropic/web-search"
+}
+```
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `safe` | boolean | Single boolean — is this skill safe to install right now? |
+| `status` | string | Trust tier: `verified`, `caution`, `failed`, `unscanned` |
+| `recommendation` | string | Action hint: `safe`, `caution`, `danger`, `unknown` |
+| `risk_score` | number \| null | 0–10 numeric risk score (lower is safer) |
+| `trust_score` | number \| null | 0–100 trust score (higher is safer) |
+| `confidence` | number \| null | 0–100 analysis confidence |
+| `intent` | string \| null | `benign`, `risky`, or `malicious` |
+| `is_outdated` | boolean | Code has changed since the last scan |
+| `summary` | string \| null | Human-readable analysis summary |
+| `about` | object \| null | AI-generated description with purpose, capabilities, and security notes |
+| `category` | string \| null | Functional category of the skill |
+| `detail_url` | string | Link to full scan detail page |
+| `badge_url` | string | Link to SVG badge |
+| `queued` | boolean | Only present on `202` responses — `true` when a scan has been auto-queued |
+| `job_id` | string | Only present on `202` responses — the scan job identifier |
+
+## Auto-Queue Behavior (202)
+
+When you check a skill that hasn't been scanned yet, PYX Scanner will automatically queue a scan if the skill corresponds to a valid GitHub repository. The response has status `202 Accepted` and includes the same fields as a `200` response, plus `queued: true` and a `job_id`.
+
+Poll the endpoint to check when the scan completes — the status will change from `unscanned` to a trust tier once the scan finishes.
+
+A `404` is only returned when the GitHub repository doesn't exist or the scan queue is full.
+
+## Error Responses
+
+| Status | Description |
+|--------|-------------|
+| `400` | Invalid or missing `owner`/`name` parameter |
+| `404` | Skill not found and could not be auto-queued (repo doesn't exist or queue is full) |
+| `429` | Rate limit exceeded (60 req/min) |

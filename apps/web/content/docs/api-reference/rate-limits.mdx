@@ -1,0 +1,43 @@
+---
+title: Rate Limits
+description: API rate limits and headers for PYX Scanner endpoints.
+---
+
+# Rate Limits
+
+All endpoints are rate-limited per IP address. No authentication is required.
+
+## Limits by Endpoint
+
+| Endpoint | Limit | Window |
+|----------|-------|--------|
+| `/api/v1/check/*` | 60 requests | per minute |
+| `/api/v1/skills` | 30 requests | per minute |
+| `/api/v1/badge/*` | No limit | cached |
+
+## Response Headers
+
+Rate limit information is returned in response headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Remaining` | Requests remaining in the current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+
+## Exceeding the Limit
+
+When you exceed the rate limit, the API returns a `429` status code:
+
+```json
+{
+  "error": "Rate limit exceeded"
+}
+```
+
+Wait until the `X-RateLimit-Reset` timestamp before retrying.
+
+## Tips for Agents
+
+- Cache responses locally — skill trust status doesn't change frequently
+- Use the `is_outdated` field to decide when to re-check
+- Batch your checks when possible rather than checking per-request

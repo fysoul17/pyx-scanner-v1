@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "PYX Scanner",
+  "name_for_model": "pyx_scanner",
+  "description_for_human": "Security scanning for AI agent skills — 7 threat categories, prompt injection detection, trust badges.",
+  "description_for_model": "PYX Scanner analyzes AI agent skills for security threats. It scans for data exfiltration, destructive commands, secret access, obfuscation, prompt injection, social engineering, and excessive permissions. Each skill receives a trust score from 0-100 and a verified/failed status. Use the badge API at /api/v1/badge/{owner}/{name} to get SVG trust badges. Browse skills at /browse or check individual skills at /s/{owner}/{name}.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://scanner.pyxmate.com/api/v1"
+  },
+  "logo_url": "https://scanner.pyxmate.com/favicon.ico",
+  "contact_email": "",
+  "legal_info_url": ""
+}

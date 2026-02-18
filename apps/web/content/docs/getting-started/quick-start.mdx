@@ -1,0 +1,58 @@
+---
+title: Quick Start
+description: Check your first AI skill's trust status in 30 seconds.
+---
+
+# Quick Start
+
+Check any AI skill's trust status with a single API call. No authentication required.
+
+## Check a Skill
+
+```bash
+curl https://scanner.pyxmate.com/api/v1/check/{owner}/{name}
+```
+
+Replace `{owner}` and `{name}` with the skill's owner and name. For example:
+
+```bash
+curl https://scanner.pyxmate.com/api/v1/check/anthropic/web-search
+```
+
+## Read the Response
+
+The response tells you everything you need to protect your users:
+
+```json
+{
+  "safe": true,
+  "status": "verified",
+  "recommendation": "safe",
+  "risk_score": 1,
+  "trust_score": 90,
+  "confidence": 95,
+  "is_outdated": false,
+  "summary": "This skill provides web search capabilities...",
+  "detail_url": "https://scanner.pyxmate.com/s/anthropic/web-search",
+  "badge_url": "https://scanner.pyxmate.com/api/v1/badge/anthropic/web-search"
+}
+```
+
+### Key Fields
+
+| Field | What It Means |
+|-------|---------------|
+| `safe` | **Single boolean** — is this skill safe to install right now? |
+| `status` | Trust tier: `verified`, `caution`, `failed`, `unscanned` |
+| `risk_score` | 0–10 numeric risk (lower is safer) |
+| `confidence` | 0–100 how certain the analysis is |
+| `is_outdated` | Code has changed since the last scan |
+
+## Make a Decision
+
+```
+if safe === true  → install the skill
+if safe === false → check status for more context
+```
+
+That's it. See the [Agent Integration Guide](/docs/integrations/agent-guide) for the full decision flow.

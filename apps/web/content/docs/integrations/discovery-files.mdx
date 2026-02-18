@@ -1,0 +1,57 @@
+---
+title: Discovery Files
+description: Machine-readable files for automated agent discovery and integration.
+---
+
+# Discovery Files
+
+PYX Scanner provides several machine-readable files for automated discovery by AI agents, LLMs, and developer tools.
+
+## llms.txt
+
+```
+https://scanner.pyxmate.com/llms.txt
+```
+
+A concise, LLM-optimized overview of PYX Scanner — what it does, how to use the API, and the trust model. Designed for AI agents that need to understand the service quickly.
+
+## llms-full.txt
+
+```
+https://scanner.pyxmate.com/llms-full.txt
+```
+
+Complete documentation in plain text, including full API reference, response schemas, trust model details, and recently scanned skills with live data.
+
+## OpenAPI Spec
+
+```
+https://scanner.pyxmate.com/api/v1/openapi.json
+```
+
+OpenAPI 3.1 specification for all public API endpoints. Use this to auto-generate client libraries or integrate with API tools.
+
+## AI Plugin Manifest
+
+```
+https://scanner.pyxmate.com/.well-known/ai-plugin.json
+```
+
+Standard AI plugin manifest for platforms that support the OpenAI plugin protocol. Points to the OpenAPI spec and describes the service for model consumption.
+
+## Using Discovery Files
+
+### For AI Agents
+
+If your agent needs to discover and understand PYX Scanner:
+
+1. Fetch `/llms.txt` for a quick overview
+2. Fetch `/api/v1/openapi.json` for structured API schema
+3. Use the check endpoint to verify skills before installation
+
+### For Developer Tools
+
+If you're building a tool that integrates with PYX Scanner:
+
+1. Fetch `/api/v1/openapi.json` to generate a typed client
+2. Reference `/llms-full.txt` for complete documentation

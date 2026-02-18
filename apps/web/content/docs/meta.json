@@ -1,0 +1,9 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "getting-started",
+    "trust-scores",
+    "api-reference",
+    "integrations"
+  ]
+}

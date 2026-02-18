@@ -1,0 +1,4 @@
+{
+  "title": "API Reference",
+  "pages": ["authentication", "check-skill", "list-skills", "badge", "rate-limits"]
+}
