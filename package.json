@@ -6,11 +6,11 @@
   "license": "BUSL-1.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fysoul17/pyx-scanner.git"
+    "url": "https://github.com/fysoul17/pyx-scanner-v1.git"
   },
   "homepage": "https://scanner.pyxmate.com",
   "bugs": {
-    "url": "https://github.com/fysoul17/pyx-scanner/issues"
+    "url": "https://github.com/fysoul17/pyx-scanner-v1/issues"
   },
   "keywords": [
     "mcp",

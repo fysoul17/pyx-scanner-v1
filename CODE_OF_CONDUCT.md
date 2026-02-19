@@ -19,7 +19,7 @@ Examples of unacceptable behavior:
 
 ## Enforcement
 
-Instances of unacceptable behavior may be reported by opening an issue at [fysoul17/pyx-scanner](https://github.com/fysoul17/pyx-scanner/issues) or contacting the maintainers directly.
+Instances of unacceptable behavior may be reported by opening an issue at [fysoul17/pyx-scanner](https://github.com/fysoul17/pyx-scanner-v1/issues) or contacting the maintainers directly.
 
 All complaints will be reviewed and investigated. The project team is obligated to maintain confidentiality with regard to the reporter.
 

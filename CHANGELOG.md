@@ -29,4 +29,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migration runner using Supabase RPC
 - CLI package scaffold (deferred — see ADR-002)
 
-[1.0.0]: https://github.com/fysoul17/pyx-scanner/releases/tag/v1.0.0
+[1.0.0]: https://github.com/fysoul17/pyx-scanner-v1/releases/tag/v1.0.0

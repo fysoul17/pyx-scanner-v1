@@ -9,7 +9,7 @@
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities through [GitHub Security Advisories](https://github.com/fysoul17/pyx-scanner/security/advisories/new).
+Please report security vulnerabilities through [GitHub Security Advisories](https://github.com/fysoul17/pyx-scanner-v1/security/advisories/new).
 
 **Do not** open a public issue for security vulnerabilities.
 

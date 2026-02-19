@@ -5,7 +5,7 @@
   "license": "BUSL-1.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fysoul17/pyx-scanner.git",
+    "url": "https://github.com/fysoul17/pyx-scanner-v1.git",
     "directory": "apps/web"
   },
   "scripts": {

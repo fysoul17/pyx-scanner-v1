@@ -40,7 +40,7 @@ export function Nav() {
           ))}
         </ul>
         <a
-          href="https://github.com/fysoul17/pyx-scanner"
+          href="https://github.com/fysoul17/pyx-scanner-v1"
           target="_blank"
           rel="noopener noreferrer"
           className="text-cv-text-muted transition-colors hover:text-cv-text"
