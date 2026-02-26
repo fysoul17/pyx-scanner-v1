@@ -46,6 +46,8 @@ try {
 // ---------------------------------------------------------------------------
 
 const STALE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+const MAX_RETRIES = 3;
+const RETRY_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes before retrying a failed job
 
 function getSupabase(): SupabaseClient {
   const url = process.env.SUPABASE_URL;
@@ -103,6 +105,39 @@ async function resetStaleJobs(db: SupabaseClient): Promise<number> {
   const count = data?.length ?? 0;
   if (count > 0) {
     console.log(`Reset ${count} stale running job(s) back to queued`);
+  }
+  return count;
+}
+
+async function resetFailedJobs(db: SupabaseClient): Promise<number> {
+  // Re-queue failed jobs that haven't exceeded MAX_RETRIES and have cooled down
+  const cooldownCutoff = new Date(Date.now() - RETRY_COOLDOWN_MS).toISOString();
+
+  const { data, error } = await db
+    .from("scan_jobs")
+    .update({
+      status: "queued",
+      started_at: null,
+      completed_at: null,
+    })
+    .eq("status", "failed")
+    .lt("retry_count", MAX_RETRIES)
+    .lt("completed_at", cooldownCutoff)
+    .select("id, error_message");
+
+  if (error) {
+    console.warn(`Warning: failed to reset failed jobs: ${error.message}`);
+    return 0;
+  }
+
+  const count = data?.length ?? 0;
+  if (count > 0) {
+    console.log(`Re-queued ${count} failed job(s) for retry (max ${MAX_RETRIES} attempts)`);
+    for (const job of data!) {
+      if (job.error_message) {
+        console.log(`  Job ${job.id.slice(0, 8)} previous error: ${job.error_message.slice(0, 200)}`);
+      }
+    }
   }
   return count;
 }
@@ -187,14 +222,11 @@ async function markFailed(
   jobId: string,
   errorMessage: string
 ): Promise<void> {
-  const { error } = await db
-    .from("scan_jobs")
-    .update({
-      status: "failed",
-      completed_at: new Date().toISOString(),
-      error_message: errorMessage.slice(0, 2000),
-    })
-    .eq("id", jobId);
+  // Atomic increment via Postgres RPC (avoids TOCTOU race on retry_count)
+  const { error } = await db.rpc("mark_job_failed", {
+    job_id: jobId,
+    err_msg: errorMessage,
+  });
 
   if (error) {
     console.warn(
@@ -266,8 +298,9 @@ export async function drainQueue(options: {
 
   const db = getSupabase();
 
-  // Reset stale running jobs first
+  // Reset stale running jobs and retry failed jobs
   await resetStaleJobs(db);
+  await resetFailedJobs(db);
 
   const jobs = await fetchQueuedJobs(db, limit);
   if (jobs.length === 0) {

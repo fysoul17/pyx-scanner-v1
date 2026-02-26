@@ -1110,7 +1110,13 @@ async function main(): Promise<void> {
   await scanGitHubRepo(owner, repoName, { dryRun, force, model });
 }
 
-main().catch((err) => {
-  console.error("Scan failed:", err instanceof Error ? err.message : err);
-  process.exit(1);
-});
+const isDirectRun =
+  process.argv[1] &&
+  resolve(process.argv[1]) === resolve(dirname(fileURLToPath(import.meta.url)), "scan.ts");
+
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error("Scan failed:", err instanceof Error ? err.message : err);
+    process.exit(1);
+  });
+}
