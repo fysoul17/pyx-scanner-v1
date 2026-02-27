@@ -122,8 +122,10 @@ export async function runClaude(
     "json",
     "--system-prompt",
     systemPrompt,
-    "--permission-mode",
-    "default",
+    "--tools",
+    "",
+    "--max-turns",
+    "1",
   ];
 
   const result = execFileSync("claude", args, {
@@ -136,6 +138,8 @@ export async function runClaude(
     structured_output?: Record<string, unknown>;
     result?: string;
     is_error?: boolean;
+    stop_reason?: string;
+    num_turns?: number;
   };
   try {
     envelope = JSON.parse(result);
@@ -151,8 +155,11 @@ export async function runClaude(
   const parsed = envelope.structured_output;
   if (!parsed) {
     console.error(
-      "No structured_output in Claude response. Keys:",
-      Object.keys(envelope).join(", ")
+      "No structured_output in Claude response.",
+      `Keys: ${Object.keys(envelope).join(", ")}`,
+      `stop_reason: ${envelope.stop_reason ?? "unknown"}`,
+      `num_turns: ${envelope.num_turns ?? "unknown"}`,
+      `result (first 300 chars): ${String(envelope.result ?? "").slice(0, 300)}`
     );
     throw new Error(
       "Claude did not return structured output. Check --json-schema flag."
