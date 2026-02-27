@@ -753,7 +753,8 @@ async function submitResult(
             "Content-Type": "application/json",
             Authorization: `Bearer ${ADMIN_KEY}`,
           },
-          body: JSON.stringify(payload),
+          // Strip \u0000 null bytes — PostgreSQL JSONB rejects them
+          body: JSON.stringify(payload).replace(/\\u0000/g, ""),
         });
       } catch (err) {
         throw new TransientError(

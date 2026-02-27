@@ -10,7 +10,9 @@ export async function POST(request: Request) {
 
   let body: ScanResultPayload;
   try {
-    body = await request.json();
+    // Strip \u0000 null bytes before parsing — PostgreSQL JSONB rejects them
+    const raw = await request.text();
+    body = JSON.parse(raw.replace(/\\u0000/g, ""));
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
