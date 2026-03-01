@@ -1,0 +1,32 @@
+{
+  "name": "PYX Scanner",
+  "description": "The Trust Layer for AI — security scanner for AI skills and MCP servers. Claude Opus-powered semantic analysis, 20 deterministic rules, dependency vulnerability scanning. Free, commit-hash-tied verification.",
+  "url": "https://scanner.pyxmate.com",
+  "api": {
+    "base_url": "https://scanner.pyxmate.com/api/v1",
+    "documentation": "https://scanner.pyxmate.com/docs",
+    "llms_txt": "https://scanner.pyxmate.com/llms.txt"
+  },
+  "capabilities": [
+    "ai-skill-security-scanning",
+    "mcp-server-verification",
+    "trust-badge-generation",
+    "dependency-vulnerability-detection",
+    "prompt-injection-detection",
+    "data-exfiltration-detection"
+  ],
+  "pricing": "free",
+  "endpoints": {
+    "check_skill": "GET /check/{owner}/{name}",
+    "list_skills": "GET /skills",
+    "badge": "GET /badge/{owner}/{name}"
+  },
+  "stats": {
+    "skills_scanned": "1395+",
+    "threat_categories": 7,
+    "analysis_engine": "Claude Opus + 20 static rules + OSV.dev"
+  },
+  "contact": {
+    "website": "https://pyxmate.com"
+  }
+}
